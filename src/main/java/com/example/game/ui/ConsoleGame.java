@@ -138,16 +138,21 @@ public class ConsoleGame {
             if (parts.length == 2) {
                 int x = Integer.parseInt(parts[0].trim());
                 int y = Integer.parseInt(parts[1].trim());
-                currentGame.makeMove(x, y);
                 System.out.println(currentGame.getCurrentPlayer() + " move: (" + x + ", " + y + ")");
-                displayBoard();
-                
-                Player currentPlayer = currentGame.getCurrentPlayer();
-                if (currentPlayer.isComputer() && currentGame.getGameStatus().equals(Game.RUNNING)) {
-                    Pair<Integer, Integer> move = currentGame.makeComputerMove();
-                    currentGame.makeMove(move.getLeft(), move.getRight());
-                    System.out.println(currentPlayer + " move: " + move);
+                try {
+                    currentGame.makeMove(x, y); 
+
                     displayBoard();
+                    
+                    Player currentPlayer = currentGame.getCurrentPlayer();
+                    if (currentPlayer.isComputer() && currentGame.getGameStatus().equals(Game.RUNNING)) {
+                        Pair<Integer, Integer> move = currentGame.makeComputerMove();
+                        System.out.println(currentPlayer + " move: " + move);
+                        displayBoard();
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    return;
                 }
                 if(currentGame.getGameStatus().equals(Game.WIN)) {
                     System.out.println(currentGame.getWinner() + " winner winner chicken dinner!!");
