@@ -11,9 +11,6 @@ public class ComputerEngine {
 
     public static Pair<Integer, Integer> getMove(Board board) {
         List<Pair<Integer, Integer>> emptyCells = board.getEmptyCells();
-        if (emptyCells.isEmpty()) {
-            return null;
-        }
         Random random = new Random();
         return emptyCells.get(random.nextInt(emptyCells.size()));
     }

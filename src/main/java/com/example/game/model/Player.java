@@ -15,7 +15,7 @@ public class Player {
     }
 
     public boolean isComputer() {
-        return type.equals("computer");
+        return type.equals("comp");
     }
 
     public char getColor() {

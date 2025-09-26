@@ -2,7 +2,10 @@ package com.example.game.ui;
 
 import java.util.Scanner;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.example.game.model.Game;
+import com.example.game.model.Player;
 import com.example.game.service.GameService;
 
 public class ConsoleGame {
@@ -65,7 +68,7 @@ public class ConsoleGame {
                     return;
                 }
                 String u1Type = u1Parts[0];
-                String u1Color = u1Parts[1];
+                char u1Color = u1Parts[1].charAt(0);
                 
                 String[] u2Parts = parts[2].trim().split(" ");
                 if (u2Parts.length != 2) {
@@ -73,7 +76,7 @@ public class ConsoleGame {
                     return;
                 }
                 String u2Type = u2Parts[0];
-                String u2Color = u2Parts[1];
+                char u2Color = u2Parts[1].charAt(0);
                 
                 currentGame = gameService.createGame(n, u1Type, u1Color, u2Type, u2Color);
                 
@@ -81,8 +84,22 @@ public class ConsoleGame {
                 System.out.println("Board size: " + n);
                 System.out.println("Player 1: " + u1Type + " (" + u1Color + ")");
                 System.out.println("Player 2: " + u2Type + " (" + u2Color + ")");
+                System.out.println(currentGame.getCurrentPlayer() + " turn");
                 
-                currentGame.start();
+                displayBoard();
+
+                Player currentPlayer = currentGame.getCurrentPlayer();
+                while (currentPlayer.isComputer() && currentGame.getGameStatus().equals(Game.RUNNING)) {
+                    Pair<Integer, Integer> move = currentGame.makeComputerMove();
+                    System.out.println(currentPlayer + " move: " + move);
+                    displayBoard();
+                    currentPlayer = currentGame.getCurrentPlayer();
+                }
+                if(currentGame.getGameStatus().equals(Game.WIN)) {
+                    System.out.println(currentGame.getWinner() + " wins!");
+                } else if(currentGame.getGameStatus().equals(Game.DRAW)) {
+                    System.out.println("Draw!");
+                }
                 
             } else {
                 System.out.println("Invalid format! Use: game N, U1, U2");
@@ -93,19 +110,57 @@ public class ConsoleGame {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+    private void displayBoard() {
+        char[][] board = currentGame.getBoard().getGrid();
+        System.out.println("Board:");
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
     
     private void handleMove(String params) {
+        if (currentGame == null) {
+            System.out.println("No game started. Use 'game' command first.");
+            return;
+        }
+        
+        if (!currentGame.getGameStatus().equals(Game.RUNNING)) {
+            System.out.println("Game is over. Start a new game.");
+            return;
+        }
+        
         try {
             String[] parts = params.split(",");
             if (parts.length == 2) {
                 int x = Integer.parseInt(parts[0].trim());
                 int y = Integer.parseInt(parts[1].trim());
-                System.out.println("Move to point (" + x + ", " + y + ")");
+                currentGame.makeMove(x, y);
+                System.out.println(currentGame.getCurrentPlayer() + " move: (" + x + ", " + y + ")");
+                displayBoard();
+                
+                Player currentPlayer = currentGame.getCurrentPlayer();
+                if (currentPlayer.isComputer() && currentGame.getGameStatus().equals(Game.RUNNING)) {
+                    Pair<Integer, Integer> move = currentGame.makeComputerMove();
+                    currentGame.makeMove(move.getLeft(), move.getRight());
+                    System.out.println(currentPlayer + " move: " + move);
+                    displayBoard();
+                }
+                if(currentGame.getGameStatus().equals(Game.WIN)) {
+                    System.out.println(currentGame.getWinner() + " winner winner chicken dinner!!");
+                } else if(currentGame.getGameStatus().equals(Game.DRAW)) {
+                    System.out.println("Draw!");
+                }
             } else {
                 System.out.println("Invalid format! Use: move X, Y");
             }
         } catch (NumberFormatException e) {
             System.out.println("Error: enter numbers!");
+        } catch (IllegalStateException e) {
+            System.out.println("Game is OVER!!!");
         }
     }
     

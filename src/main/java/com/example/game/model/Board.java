@@ -19,16 +19,6 @@ public class Board {
             }
         }
     }
-    
-    public void display() {
-        System.out.println("Board:");
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                System.out.print(grid[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
 
     public List<Pair<Integer, Integer>> getEmptyCells() {
         List<Pair<Integer, Integer>> emptyCells = new ArrayList<>();
@@ -42,19 +32,21 @@ public class Board {
         return emptyCells;
     }
 
-    public boolean makeMove(int x, int y, char color) {
+    public void makeMove(int x, int y, char color) {
         String errorMessage = validateMove(x, y, color);
         if (errorMessage != null) {
-            System.out.println(errorMessage);
-            return false;
+            throw new IllegalArgumentException(errorMessage);
         }
         
         grid[x][y] = color;
-        return true;
     }
     
-    public boolean isValidMove(int x, int y, char color) {
-        return validateMove(x, y, color) == null;
+    public String isValidMove(int x, int y, char color) {
+        String errorMessage = validateMove(x, y, color);
+        if (errorMessage != null) {
+            return errorMessage;
+        }
+        return null;
     }
     
     private String validateMove(int x, int y, char color) {
@@ -75,5 +67,9 @@ public class Board {
         }
         
         return null;
+    }
+
+    public char[][] getGrid() {
+        return grid;
     }
 }
