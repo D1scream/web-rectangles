@@ -9,7 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class Board {
     private final int size;
     private final char[][] grid;
-    
+    private Pair<Integer, Integer> lastMove;
     public Board(int size) {
         this.size = size;
         this.grid = new char[size][size];
@@ -39,6 +39,7 @@ public class Board {
         }
         
         grid[x][y] = color;
+        lastMove = Pair.of(x, y);
     }
     
     public String isValidMove(int x, int y, char color) {
@@ -71,5 +72,13 @@ public class Board {
 
     public char[][] getGrid() {
         return grid;
+    }
+    
+    public int getSize() {
+        return size;
+    }
+
+    public Pair<Integer, Integer> getLastMove() {
+        return lastMove;
     }
 }
