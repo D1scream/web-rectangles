@@ -41,8 +41,11 @@ public class ConsoleGame {
                 case "move":
                     handleMove(params);
                     break;
+                case "status":
+                    handleStatus();
+                    break;
                 default:
-                    System.out.println("Unknown command: " + command);
+                    System.out.println("Incorrect command: " + command + ". Type 'help' for available commands.");
                     break;
             }
         }
@@ -52,8 +55,9 @@ public class ConsoleGame {
         System.out.println("Commands:");
         System.out.println("exit - exit program");
         System.out.println("help - show commands");
-        System.out.println("game N, U1, U2 - start game");
-        System.out.println("move X, Y - move");
+        System.out.println("game N, U1, U2 - start new game");
+        System.out.println("move X, Y - make a move");
+        System.out.println("status - show current game status");
     }
     
     private void handleGame(String params) {
@@ -91,7 +95,7 @@ public class ConsoleGame {
                 Player currentPlayer = currentGame.getCurrentPlayer();
                 while (currentPlayer.isComputer() && currentGame.getGameStatus().equals(Game.RUNNING)) {
                     Pair<Integer, Integer> move = currentGame.makeComputerMove();
-                    System.out.println(currentPlayer + " move: " + move);
+                    System.out.println(currentPlayer.getColor() + " (" + move.getLeft() + ", " + move.getRight() + ")");
                     displayBoard();
                     currentPlayer = currentGame.getCurrentPlayer();
                 }
@@ -147,7 +151,7 @@ public class ConsoleGame {
                     Player currentPlayer = currentGame.getCurrentPlayer();
                     if (currentPlayer.isComputer() && currentGame.getGameStatus().equals(Game.RUNNING)) {
                         Pair<Integer, Integer> move = currentGame.makeComputerMove();
-                        System.out.println(currentPlayer + " move: " + move);
+                        System.out.println(currentPlayer.getColor() + " (" + move.getLeft() + ", " + move.getRight() + ")");
                         displayBoard();
                     }
                 } catch (IllegalArgumentException e) {
@@ -168,6 +172,22 @@ public class ConsoleGame {
             System.out.println("Game is OVER!!!");
         }
     }
+    
+    private void handleStatus() {
+        if (currentGame == null) {
+            System.out.println("No game started. Use 'game' command first.");
+            return;
+        }
+        
+        System.out.println("Current game status:");
+        System.out.println("Status: " + currentGame.getGameStatus());
+        System.out.println("Current player: " + currentGame.getCurrentPlayer());
+        if (currentGame.getWinner() != null) {
+            System.out.println("Winner: " + currentGame.getWinner());
+        }
+        displayBoard();
+    }
+    
     
     public void close() {
         if (scanner != null) {
