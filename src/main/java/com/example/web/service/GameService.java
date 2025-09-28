@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import com.example.game.engine.ComputerEngine;
 import com.example.game.model.Board;
+import com.example.game.model.GameConstants;
 import com.example.web.dto.GameRequest;
 import com.example.web.dto.GameResponse;
 import com.example.web.exception.GameDataException;
@@ -27,8 +28,9 @@ public class GameService {
             String winner = null;
             GameResponse.Move responseMove = null;
             
-            if (Board.RUNNING.equals(gameStatus)) {
-                Pair<Integer, Integer> move = ComputerEngine.getMove(board);
+            if (GameConstants.RUNNING.equals(gameStatus)) {
+                ComputerEngine engine = new ComputerEngine();
+                Pair<Integer, Integer> move = engine.getMove(board);
                 responseMove = new GameResponse.Move(
                     move.getLeft(), 
                     move.getRight(), 
@@ -41,7 +43,7 @@ public class GameService {
                 
                 gameStatus = board.getGameStatus();
             } 
-            if (Board.WHITE_WIN.equals(gameStatus) || Board.BLACK_WIN.equals(gameStatus)) {
+            if (GameConstants.WHITE_WIN.equals(gameStatus) || GameConstants.BLACK_WIN.equals(gameStatus)) {
                 winner = String.valueOf(board.getWinner());
             }
             
@@ -58,6 +60,13 @@ public class GameService {
     
     private Board createBoardFromString(String data, int size) {
         logger.debug("Creating board from string: data='{}', size={}", data, size);
+        
+        if (size < GameConstants.MIN_BOARD_SIZE || size > GameConstants.MAX_BOARD_SIZE) {
+            String errorMsg = String.format("Invalid board size: %d. Must be between %d and %d", 
+                                          size, GameConstants.MIN_BOARD_SIZE, GameConstants.MAX_BOARD_SIZE);
+            logger.error(errorMsg);
+            throw new GameValidationException(errorMsg);
+        }
         
         int expectedLength = size * size;
         if (data.length() != expectedLength) {

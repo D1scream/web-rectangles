@@ -18,17 +18,12 @@ public class Game {
 
     public void makeMove(int x, int y) {
         char color = getCurrentPlayer().getColor();
-        try {
-            board.makeMove(x, y, color);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid move: " + e.getMessage());
-        } catch (IllegalStateException e) {
-            throw new IllegalStateException("Game is over");
-        }
+        board.makeMove(x, y, color);
     }
 
     public Pair<Integer, Integer> makeComputerMove() {
-        Pair<Integer, Integer> move = ComputerEngine.getMove(board);
+        ComputerEngine engine = new ComputerEngine();
+        Pair<Integer, Integer> move = engine.getMove(board);
         makeMove(move.getLeft(), move.getRight());
         return move;
     }

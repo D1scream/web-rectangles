@@ -15,10 +15,6 @@ import com.sun.net.httpserver.HttpHandler;
 public class MoveHandler implements HttpHandler {
     private final GameService gameService;
     
-    public MoveHandler() {
-        this.gameService = new GameService();
-    }
-    
     public MoveHandler(GameService gameService) {
         this.gameService = gameService;
     }

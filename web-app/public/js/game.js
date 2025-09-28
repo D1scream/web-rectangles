@@ -28,12 +28,16 @@ function setupEventListeners() {
     document.getElementById('new-game-btn').onclick = newGame;
     document.getElementById('white-color-btn').onclick = () => selectColor('w');
     document.getElementById('black-color-btn').onclick = () => selectColor('b');
+    document.getElementById('apply-size-btn').onclick = applyBoardSize;
 }
 
 function renderBoard() {
     const boardElement = document.getElementById('game-board');
     boardElement.innerHTML = '';
     boardElement.style.gridTemplateColumns = `repeat(${boardSize}, 1fr)`;
+    
+    const cellSize = Math.max(20, Math.min(40, 400 / boardSize));
+    boardElement.style.setProperty('--cell-size', `${cellSize}px`);
     
     for (let i = 0; i < boardSize; i++) {
         for (let j = 0; j < boardSize; j++) {
@@ -56,6 +60,20 @@ function selectColor(color) {
     document.getElementById('white-color-btn').classList.toggle('active', color === 'w');
     document.getElementById('black-color-btn').classList.toggle('active', color === 'b');
     
+    newGame();
+}
+
+function applyBoardSize() {
+    const sizeInput = document.getElementById('board-size-input');
+    const newSize = parseInt(sizeInput.value);
+    
+    if (isNaN(newSize) || newSize < 3 || newSize > 30) {
+        alert('Размер поля должен быть числом больше 2 и не больше 30');
+        sizeInput.value = boardSize;
+        return;
+    }
+    
+    boardSize = newSize;
     newGame();
 }
 
@@ -127,8 +145,8 @@ function updateUI() {
     
     if (gameStatus === 'running') {
         winMessageElement.classList.add('hidden');
-        winMessageElement.classList.remove('player-win', 'computer-win');
-        gameBoardElement.classList.remove('computer-win');
+        winMessageElement.classList.remove('player-win', 'computer-win', 'draw');
+        gameBoardElement.classList.remove('computer-win', 'draw');
         currentPlayerElement.textContent = currentPlayer === 'w' ? 'Белый' : 'Черный';
         gameStatusElement.textContent = isPlayerTurn ? 'Ваш ход' : 'Ход компьютера...';
     } else {
@@ -152,6 +170,10 @@ function updateUI() {
             gameStatusElement.textContent = 'Ничья!';
             winMessageElement.textContent = 'Ничья!';
             winMessageElement.classList.remove('hidden');
+            winMessageElement.classList.add('draw');
+            winMessageElement.classList.remove('player-win', 'computer-win');
+            gameBoardElement.classList.add('draw');
+            gameBoardElement.classList.remove('computer-win');
         }
     }
 }

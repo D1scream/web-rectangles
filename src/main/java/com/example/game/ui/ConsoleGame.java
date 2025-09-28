@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.example.game.model.Board;
 import com.example.game.model.Game;
+import com.example.game.model.GameConstants;
 import com.example.game.model.Player;
 
 public class ConsoleGame {
@@ -90,17 +90,17 @@ public class ConsoleGame {
                 displayBoard();
 
                 Player currentPlayer = currentGame.getCurrentPlayer();
-                while (currentPlayer.isComputer() && currentGame.getGameStatus().equals(Board.RUNNING)) {
+                while (currentPlayer.isComputer() && currentGame.getGameStatus().equals(GameConstants.RUNNING)) {
                     Pair<Integer, Integer> move = currentGame.makeComputerMove();
                     System.out.println(currentPlayer.getColor() + " (" + move.getLeft() + ", " + move.getRight() + ")");
                     displayBoard();
                     currentPlayer = currentGame.getCurrentPlayer();
                 }
-                if(currentGame.getGameStatus().equals(Board.WHITE_WIN)) {
+                if(currentGame.getGameStatus().equals(GameConstants.WHITE_WIN)) {
                     System.out.println("White wins!");
-                } else if(currentGame.getGameStatus().equals(Board.BLACK_WIN)) {
+                } else if(currentGame.getGameStatus().equals(GameConstants.BLACK_WIN)) {
                     System.out.println("Black wins!");
-                } else if(currentGame.getGameStatus().equals(Board.DRAW)) {
+                } else if(currentGame.getGameStatus().equals(GameConstants.DRAW)) {
                     System.out.println("Draw!");
                 }
                 
@@ -131,7 +131,7 @@ public class ConsoleGame {
             return;
         }
         
-        if (!currentGame.getGameStatus().equals(Board.RUNNING)) {
+        if (!currentGame.getGameStatus().equals(GameConstants.RUNNING)) {
             System.out.println("Game is over. Start a new game.");
             return;
         }
@@ -148,7 +148,7 @@ public class ConsoleGame {
                     displayBoard();
                     
                     Player currentPlayer = currentGame.getCurrentPlayer();
-                    if (currentPlayer.isComputer() && currentGame.getGameStatus().equals(Board.RUNNING)) {
+                    if (currentPlayer.isComputer() && currentGame.getGameStatus().equals(GameConstants.RUNNING)) {
                         Pair<Integer, Integer> move = currentGame.makeComputerMove();
                         System.out.println(currentPlayer.getColor() + " (" + move.getLeft() + ", " + move.getRight() + ")");
                         displayBoard();
@@ -157,11 +157,11 @@ public class ConsoleGame {
                     System.out.println("Error: " + e.getMessage());
                     return;
                 }
-                if(currentGame.getGameStatus().equals(Board.WHITE_WIN)) {
+                if(currentGame.getGameStatus().equals(GameConstants.WHITE_WIN)) {
                     System.out.println("White wins!");
-                } else if(currentGame.getGameStatus().equals(Board.BLACK_WIN)) {
+                } else if(currentGame.getGameStatus().equals(GameConstants.BLACK_WIN)) {
                     System.out.println("Black wins!");
-                } else if(currentGame.getGameStatus().equals(Board.DRAW)) {
+                } else if(currentGame.getGameStatus().equals(GameConstants.DRAW)) {
                     System.out.println("Draw!");
                 }
             } else {

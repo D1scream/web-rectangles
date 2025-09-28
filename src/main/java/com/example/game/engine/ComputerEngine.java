@@ -7,9 +7,10 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.example.game.model.Board;
 
-public class ComputerEngine { 
+public class ComputerEngine implements GameEngine { 
 
-    public static Pair<Integer, Integer> getMove(Board board) {
+    @Override
+    public Pair<Integer, Integer> getMove(Board board) {
         List<Pair<Integer, Integer>> emptyCells = board.getEmptyCells();
         Random random = new Random();
         return emptyCells.get(random.nextInt(emptyCells.size()));
