@@ -1,14 +1,17 @@
 package com.example.web.util;
 
-import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+
+import com.sun.net.httpserver.HttpExchange;
 
 public class HttpUtils {
     
     public static void addCORSHeaders(HttpExchange exchange) {
         exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization");
         exchange.getResponseHeaders().add("Content-Type", "application/json");
     }
     

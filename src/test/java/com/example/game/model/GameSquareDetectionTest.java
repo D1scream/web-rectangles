@@ -1,6 +1,5 @@
 package com.example.game.model;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,63 +19,99 @@ public class GameSquareDetectionTest {
     @Test
     void testNoSquare_EmptyBoard() {
         // Пустая доска - нет квадратов
-        assertFalse(game.checkWin(0, 0, 'w'));
+        char[][] emptyBoard = {
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(emptyBoard);
+        assertTrue(game.getBoard().checkWin() == null);
     }
     
     @Test
     void testNoSquare_SinglePiece() {
         // Одна фишка - нет квадратов
-        game.makeMove(0, 0);
-        assertFalse(game.checkWin(0, 0, 'w'));
+        char[][] singlePiece = {
+            {'w', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(singlePiece);
+        assertTrue(game.getBoard().checkWin() == null);
     }
     
     @Test
     void testNoSquare_TwoPieces() {
         // Две фишки - нет квадратов
-        game.makeMove(0, 0);
-        game.makeMove(1, 0);
-        assertFalse(game.checkWin(1, 0, 'w'));
+        char[][] twoPieces = {
+            {'w', 'w', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(twoPieces);
+        assertTrue(game.getBoard().checkWin() == null);
     }
     
     @Test
     void testNoSquare_ThreePieces() {
         // Три фишки - нет квадратов
-        game.makeMove(0, 0);
-        game.makeMove(1, 0);
-        game.makeMove(0, 1);
-        assertFalse(game.checkWin(0, 1, 'w'));
+        char[][] threePieces = {
+            {'w', 'w', '.', '.', '.'},
+            {'w', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(threePieces);
+        assertTrue(game.getBoard().checkWin() == null);
     }
     
     @Test
     void testNoSquare_MixedColors() {
         // Фишки разных цветов - нет квадрата
-        game.makeMove(0, 0); // w
-        game.makeMove(1, 0); // b
-        game.makeMove(0, 1); // w
-        game.makeMove(1, 1); // b
-        assertFalse(game.checkWin(1, 1, 'w'));
+        char[][] mixedColors = {
+            {'w', 'b', '.', '.', '.'},
+            {'w', 'b', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(mixedColors);
+        assertTrue(game.getBoard().checkWin() == null);
     }
     
     @Test
     void testNoSquare_IncompleteSquare() {
         // Неполный квадрат - нет квадрата
-        game.makeMove(0, 0); // w
-        game.makeMove(2, 0); // b
-        game.makeMove(1, 0); // w
-        game.makeMove(2, 1); // b
-        game.makeMove(0, 1); // w
-        game.makeMove(2, 2); // b
-        // Нет четвертой фишки для квадрата
-        assertFalse(game.checkWin(0, 1, 'w'));
+        char[][] incompleteSquare = {
+            {'w', 'w', 'b', '.', '.'},
+            {'w', '.', 'b', '.', '.'},
+            {'.', '.', 'b', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(incompleteSquare);
+        assertTrue(game.getBoard().checkWin() == null);
     }
 
     @Test
     void testNoSquare_DiagonalPieces() {
         // Три фишки по диагонали — нет квадрата
-        game.makeMove(0,0); // w
-        game.makeMove(1,1); // b
-        game.makeMove(2,2); // w
-        assertFalse(game.checkWin(2,2,'w'));
+        char[][] diagonalPieces = {
+            {'w', '.', '.', '.', '.'},
+            {'.', 'b', '.', '.', '.'},
+            {'.', '.', 'w', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(diagonalPieces);
+        assertTrue(game.getBoard().checkWin() == null);
     }
     
     // ========== ТЕСТЫ НА НАЛИЧИЕ КВАДРАТОВ ==========
@@ -85,14 +120,15 @@ public class GameSquareDetectionTest {
     void testSquare_Rotated45Degrees() {
         // Квадрат повернут на 45° (ромб)
         // координаты вершин: (1,0),(2,1),(1,2),(0,1)
-        game.makeMove(1,0); // w
-        game.makeMove(3,0); // b
-        game.makeMove(2,1); // w
-        game.makeMove(3,1); // b
-        game.makeMove(1,2); // w
-        game.makeMove(3,2); // b
-        game.makeMove(0,1); // w
-        assertTrue(game.checkWin(0,1,'w'));
+        char[][] rotatedSquare = {
+            {'.', 'w', '.', 'b', '.'},
+            {'w', '.', 'w', 'b', '.'},
+            {'.', 'w', '.', 'b', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(rotatedSquare);
+        assertTrue(game.getBoard().checkWin() == 'w');
     }
     
     @Test
@@ -100,57 +136,56 @@ public class GameSquareDetectionTest {
         // Квадрат
         // w w
         // w w
-        game.makeMove(0, 0); // w
-        game.makeMove(2, 0); // b
-        game.makeMove(0, 1); // w
-        game.makeMove(2, 1); // b
-        game.makeMove(1, 0); // w
-        game.makeMove(3, 0); // b
-        game.makeMove(1, 1); // w
-        
-        assertTrue(game.checkWin(1, 1, 'w'));
+        char[][] square = {
+            {'w', 'w', 'b', 'b', '.'},
+            {'w', 'w', 'b', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(square);
+        assertTrue(game.getBoard().checkWin() == 'w');
     }
     
     @Test
     void testSquare_AtBoardEdge() {
         // Квадрат у края доски
-        game.makeMove(0, 0); // w
-        game.makeMove(2, 0); // b
-        game.makeMove(1, 0); // w
-        game.makeMove(2, 1); // b
-        game.makeMove(0, 1); // w
-        game.makeMove(2, 2); // b
-        game.makeMove(1, 1); // w
-        
-        assertTrue(game.checkWin(1, 1, 'w'));
+        char[][] edgeSquare = {
+            {'w', 'w', 'b', '.', '.'},
+            {'w', 'w', 'b', '.', '.'},
+            {'.', '.', 'b', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(edgeSquare);
+        assertTrue(game.getBoard().checkWin() == 'w');
     }
     
     @Test
     void testSquare_CenterOfBoard() {
         // Квадрат в центре доски
-        game.makeMove(1, 1); // w
-        game.makeMove(3, 1); // b
-        game.makeMove(2, 1); // w
-        game.makeMove(3, 2); // b
-        game.makeMove(1, 2); // w
-        game.makeMove(3, 3); // b
-        game.makeMove(2, 2); // w
-        
-        assertTrue(game.checkWin(2, 2, 'w'));
+        char[][] centerSquare = {
+            {'.', '.', '.', '.', '.'},
+            {'.', 'w', 'w', 'b', '.'},
+            {'.', 'w', 'w', 'b', '.'},
+            {'.', '.', '.', 'b', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(centerSquare);
+        assertTrue(game.getBoard().checkWin() == 'w');
     }
     
     @Test
     void testSquare_BlackPieces() {
         // Квадрат из черных фишек
-        Game blackGame = new Game(5, "user", 'b', "comp", 'w');
-        blackGame.makeMove(0, 0); // b
-        blackGame.makeMove(2, 0); // w
-        blackGame.makeMove(0, 1); // b
-        blackGame.makeMove(2, 1); // w
-        blackGame.makeMove(1, 0); // b
-        blackGame.makeMove(3, 0); // w
-        blackGame.makeMove(1, 1); // b
-        
-        assertTrue(blackGame.checkWin(1, 1, 'b'));
+        char[][] blackSquare = {
+            {'b', 'b', 'w', 'w', '.'},
+            {'b', 'b', 'w', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'},
+            {'.', '.', '.', '.', '.'}
+        };
+        game.getBoard().setGrid(blackSquare);
+        assertTrue(game.getBoard().checkWin() == 'b');
     }
 }

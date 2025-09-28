@@ -6,14 +6,32 @@ public class GameResponse {
     @JsonProperty("move")
     private Move move;
     
+    @JsonProperty("gameStatus")
+    private String gameStatus;
+    
+    @JsonProperty("winner")
+    private String winner;
+    
     public GameResponse() {}
     
     public GameResponse(Move move) {
         this.move = move;
     }
     
+    public GameResponse(Move move, String gameStatus, String winner) {
+        this.move = move;
+        this.gameStatus = gameStatus;
+        this.winner = winner;
+    }
+    
     public Move getMove() { return move; }
     public void setMove(Move move) { this.move = move; }
+    
+    public String getGameStatus() { return gameStatus; }
+    public void setGameStatus(String gameStatus) { this.gameStatus = gameStatus; }
+    
+    public String getWinner() { return winner; }
+    public void setWinner(String winner) { this.winner = winner; }
     
     public static class Move {
         @JsonProperty("x")

@@ -3,7 +3,7 @@ package com.example.web;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import com.example.web.controller.MoveController;
+import com.example.web.handler.MoveHandler;
 import com.example.web.service.GameService;
 import com.sun.net.httpserver.HttpServer;
 
@@ -17,7 +17,7 @@ public class WebServer {
         
         GameService gameService = new GameService();
         
-        server.createContext(MOVE_ENDPOINT, new MoveController(gameService));
+        server.createContext(MOVE_ENDPOINT, new MoveHandler(gameService));
         
         server.setExecutor(null);
         server.start();

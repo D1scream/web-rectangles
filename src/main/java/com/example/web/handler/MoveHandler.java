@@ -1,4 +1,4 @@
-package com.example.web.controller;
+package com.example.web.handler;
 
 import java.io.IOException;
 
@@ -12,20 +12,25 @@ import com.example.web.util.JsonUtils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class MoveController implements HttpHandler {
+public class MoveHandler implements HttpHandler {
     private final GameService gameService;
     
-    public MoveController() {
+    public MoveHandler() {
         this.gameService = new GameService();
     }
     
-    public MoveController(GameService gameService) {
+    public MoveHandler(GameService gameService) {
         this.gameService = gameService;
     }
     
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         HttpUtils.addCORSHeaders(exchange);
+        
+        if ("OPTIONS".equals(exchange.getRequestMethod())) {
+            HttpUtils.sendResponse(exchange, 200, "");
+            return;
+        }
         
         if (!"POST".equals(exchange.getRequestMethod())) {
             HttpUtils.sendError(exchange, 405, "Method Not Allowed");

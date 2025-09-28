@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Игра в квадраты</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Игра в квадраты</h1>
+        
+        <div class="color-selection">
+            <div class="color-options">
+                <button id="white-color-btn" class="color-btn active">Белый</button>
+                <button id="black-color-btn" class="color-btn">Черный</button>
+            </div>
+        </div>
+        
+        <div class="game-info">
+            <span>Игрок: </span><span id="current-player-color">Белый</span>
+            <span> | </span>
+            <span id="game-status">Ваш ход</span>
+        </div>
+        
+        <div class="game-board-container">
+            <div id="game-board" class="game-board"></div>
+            <div id="win-message" class="win-message hidden"></div>
+        </div>
+        
+        <div class="controls">
+            <button id="new-game-btn" class="btn">Новая игра</button>
+        </div>
+    </div>
+    
+    <script src="js/game.js"></script>
+</body>
+</html>

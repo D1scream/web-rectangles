@@ -2,23 +2,37 @@
 
 Игра "Квадраты" - консольная игра для двух игроков, где цель состоит в том, чтобы первым создать квадрат из своих фишек на доске. Квадрат может быть любого размера и в любой ориентации.
 
+## Требования
+
+- Java 8+
+- Maven 3.6+
+- Python 3.x (для веб-приложения)
+
 ## Сборка проекта
 
 ```bash
 mvn clean compile
 ```
 
-## Запуск игры
+## Запуск
 
-###  Консольная игра
+### Консольная игра
 ```bash
 mvn exec:java "-Dexec.mainClass=com.example.Main"
 ```
 
-##  Web-сервис
+### Web-сервис (API)
 ```bash
 mvn exec:java "-Dexec.mainClass=com.example.WebMain"
 ```
+
+### Веб-приложение
+```bash
+# В папке web-app
+python server.py
+```
+
+Веб-приложение будет доступно по адресу: http://localhost:3000
 
 ## Команды игры
 
@@ -35,12 +49,14 @@ mvn exec:java "-Dexec.mainClass=com.example.WebMain"
 
 ## Web API
 
+Проект включает два компонента:
+
+### 1. REST API (Java)
 Web-сервис предоставляет REST API для вычисления ходов:
 
-### Эндпоинты
+#### Эндпоинты
 
 - **POST /api/move** - Вычислить следующий ход
-- **POST /api/getStatus** - Проверить статус игры
 
 ### Формат запроса
 
@@ -52,12 +68,9 @@ Web-сервис предоставляет REST API для вычисления
 }
 ```
 
-### Формат ответа для хода
-
+**Ответ:**
 ```json
 {
-  "success": true,
-  "message": "Move calculated successfully",
   "move": {
     "x": 2,
     "y": 1,
@@ -66,19 +79,7 @@ Web-сервис предоставляет REST API для вычисления
 }
 ```
 
-### Формат ответа для статуса
-
-```json
-{
-  "success": true,
-  "message": "Status retrieved successfully",
-  "status": "running",
-  "winner": "",
-  "gameOver": false
-}
-```
-
-### Пример использования
+#### Пример использования
 
 ```bash
 # Получить следующий ход
@@ -89,16 +90,14 @@ curl -X POST http://localhost:8080/api/move \
     "data": "       b   w w   b       ",
     "nextPlayerColor": "b"
   }'
-
-# Проверить статус игры
-curl -X POST http://localhost:8080/api/getStatus \
-  -H "Content-Type: application/json" \
-  -d '{
-    "size": 5,
-    "data": "       b   w w   b       ",
-    "nextPlayerColor": "b"
-  }'
 ```
+
+### 2. Веб-приложение (Python + HTML/CSS/JS)
+Интерактивный веб-интерфейс для игры против компьютера.
+
+#### Технологии
+- HTML5, CSS3, JavaScript (ES6+)
+- Python HTTP Server
 
 ## Запуск тестов
 

@@ -21,16 +21,34 @@ public class GameService {
         
         try {
             Board board = createBoardFromString(request.getData(), request.getSize());
-            Pair<Integer, Integer> move = ComputerEngine.getMove(board);
-            logger.info("Computer calculated move: x={}, y={}", move.getLeft(), move.getRight());
+            logger.info("Game status: {}", board.getGameStatus());
+
+            String gameStatus = board.getGameStatus();
+            String winner = null;
+            GameResponse.Move responseMove = null;
             
-            GameResponse.Move responseMove = new GameResponse.Move(
-                move.getLeft(), 
-                move.getRight(), 
-                request.getNextPlayerColor()
-            );
-            return new GameResponse(responseMove);
+            if (Board.RUNNING.equals(gameStatus)) {
+                Pair<Integer, Integer> move = ComputerEngine.getMove(board);
+                responseMove = new GameResponse.Move(
+                    move.getLeft(), 
+                    move.getRight(), 
+                    request.getNextPlayerColor()
+                );
+                logger.info("Computer calculated move: x={}, y={}", move.getLeft(), move.getRight());
+                
+                char playerColor = request.getNextPlayerColor().charAt(0);
+                board.makeMove(move.getLeft(), move.getRight(), playerColor);
+                
+                gameStatus = board.getGameStatus();
+            } 
+            if (Board.WHITE_WIN.equals(gameStatus) || Board.BLACK_WIN.equals(gameStatus)) {
+                winner = String.valueOf(board.getWinner());
+            }
             
+            return new GameResponse(responseMove, gameStatus, winner);
+        } catch (GameValidationException e) {
+            logger.error("Incorrect game data: {}", e.getMessage());
+            throw e;
         } catch (Exception e) {
             logger.error("Error calculating move: {}", e.getMessage(), e);
             throw new RuntimeException("Error calculating move: " + e.getMessage());
@@ -51,23 +69,20 @@ public class GameService {
         
         try {
             Board board = new Board(size);
-            char[][] grid = board.getGrid();
+            char[][] grid = new char[size][size];
             
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                     int index = i * size + j;
-                    char cell = data.charAt(index);
-                    if (cell != '.' && cell != 'w' && cell != 'b') {
-                        throw new GameValidationException(String.format("Invalid character: '%c'. Only '.' (empty), 'w' (white), and 'b' (black) are allowed", cell));
-                    }
-                    grid[i][j] = cell;
-
+                    grid[i][j] = data.charAt(index);
                 }
             }
             
             board.setGrid(grid);
             logger.debug("Board created successfully with {}x{} grid", size, size);
             return board;
+        } catch (IllegalStateException e) {
+            throw new GameValidationException(e.getMessage());
         } catch (Exception e) {
             logger.error("Error creating board from string: {}", e.getMessage(), e);
             throw new RuntimeException("Error creating board from string: " + e.getMessage());
