@@ -6,16 +6,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.example.game.model.Game;
 import com.example.game.model.Player;
-import com.example.game.service.GameService;
 
 public class ConsoleGame {
     private final Scanner scanner;
     private Game currentGame;
-    private final GameService gameService;
-    
     public ConsoleGame() {
         this.scanner = new Scanner(System.in);
-        this.gameService = new GameService();
     }
     
     public void start() {
@@ -82,7 +78,7 @@ public class ConsoleGame {
                 String u2Type = u2Parts[0];
                 char u2Color = u2Parts[1].charAt(0);
                 
-                currentGame = gameService.createGame(n, u1Type, u1Color, u2Type, u2Color);
+                currentGame = new Game(n, u1Type, u1Color, u2Type, u2Color);
                 
                 System.out.println("New game started:");
                 System.out.println("Board size: " + n);

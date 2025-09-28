@@ -8,9 +8,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class Board {
     private final int size;
-    private final char[][] grid;
+    private char[][] grid;
     private Pair<Integer, Integer> lastMove;
     public Board(int size) {
+        if(size < 3) {
+            throw new IllegalArgumentException("Board size must be > 2");
+        }
         this.size = size;
         this.grid = new char[size][size];
         for (int i = 0; i < size; i++) {
@@ -33,42 +36,25 @@ public class Board {
     }
 
     public void makeMove(int x, int y, char color) {
-        String errorMessage = validateMove(x, y, color);
-        if (errorMessage != null) {
-            throw new IllegalArgumentException(errorMessage);
+        if (x < 0 || x >= size) {
+            throw new IllegalArgumentException(String.format("Invalid move: x=%d is out of bounds. Board size is %dx%d", x, size, size));
         }
         
+        if (y < 0 || y >= size) {
+            throw new IllegalArgumentException(String.format("Invalid move: y=%d is out of bounds. Board size is %dx%d", y, size, size));
+        }
+        
+        if (grid[x][y] != '.') {
+            throw new IllegalArgumentException(String.format("Invalid move: cell (%d, %d) is already occupied by '%c'", x, y, grid[x][y]));
+        }
+        
+        if (color != 'w' && color != 'b') {
+            throw new IllegalArgumentException(String.format("Invalid color: '%c'. Only 'w' (white) and 'b' (black) are allowed", color));
+        }
         grid[x][y] = color;
         lastMove = Pair.of(x, y);
     }
     
-    public String isValidMove(int x, int y, char color) {
-        String errorMessage = validateMove(x, y, color);
-        if (errorMessage != null) {
-            return errorMessage;
-        }
-        return null;
-    }
-    
-    private String validateMove(int x, int y, char color) {
-        if (x < 0 || x >= size) {
-            return String.format("Invalid move: x=%d is out of bounds. Board size is %dx%d", x, size, size);
-        }
-        
-        if (y < 0 || y >= size) {
-            return String.format("Invalid move: y=%d is out of bounds. Board size is %dx%d", y, size, size);
-        }
-        
-        if (grid[x][y] != '.') {
-            return String.format("Invalid move: cell (%d, %d) is already occupied by '%c'", x, y, grid[x][y]);
-        }
-        
-        if (color != 'w' && color != 'b') {
-            return String.format("Invalid color: '%c'. Only 'w' (white) and 'b' (black) are allowed", color);
-        }
-        
-        return null;
-    }
 
     public char[][] getGrid() {
         return grid;
@@ -80,5 +66,9 @@ public class Board {
 
     public Pair<Integer, Integer> getLastMove() {
         return lastMove;
+    }
+    
+    public void setGrid(char[][] grid) {
+        this.grid = grid;
     }
 }

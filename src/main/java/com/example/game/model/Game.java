@@ -37,11 +37,15 @@ public class Game {
     public void makeMove(int x, int y) {
         if(gameStatus.equals(RUNNING)) {
             char color = getCurrentPlayer().getColor();
-            board.makeMove(x, y, color);
-            playerPoints.computeIfAbsent(color,k->new HashSet<>()).add(encode(x,y));
-            checkGameStatus();
-            turn++;
-            turn = turn % 2;
+            try {
+                board.makeMove(x, y, color);
+                playerPoints.computeIfAbsent(color,k->new HashSet<>()).add(encode(x,y));
+                checkGameStatus();
+                turn++;
+                turn = turn % 2;
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Invalid move: " + e.getMessage());
+            }
         }
         else {
             throw new IllegalStateException("Game is over");

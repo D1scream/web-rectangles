@@ -1,15 +1,6 @@
 # Web Rectangles
 
-Игра "Квадраты" - консольная игра для двух игроков, где цель состоит в том, чтобы первым создать квадрат из своих фишек на доске.
-
-## Описание игры
-
-Игроки по очереди ставят фишки на доску. Побеждает тот, кто первым создаст квадрат из четырех своих фишек. Квадрат может быть любого размера и в любой ориентации.
-
-## Требования
-
-- Java 8
-- Maven 3.6 или выше
+Игра "Квадраты" - консольная игра для двух игроков, где цель состоит в том, чтобы первым создать квадрат из своих фишек на доске. Квадрат может быть любого размера и в любой ориентации.
 
 ## Сборка проекта
 
@@ -19,18 +10,14 @@ mvn clean compile
 
 ## Запуск игры
 
-### Способ 1: Через Maven
+###  Консольная игра
 ```bash
-mvn exec:java
+mvn exec:java "-Dexec.mainClass=com.example.Main"
 ```
 
-### Способ 2: Прямой запуск через Java
+##  Web-сервис
 ```bash
-# Компиляция
-mvn compile
-
-# Запуск
-java -cp target/classes com.example.Main
+mvn exec:java "-Dexec.mainClass=com.example.WebMain"
 ```
 
 ## Команды игры
@@ -45,6 +32,73 @@ java -cp target/classes com.example.Main
   - Цвета: "w" (белый), "b" (черный)
 - `move X, Y` - сделать ход (X, Y - координаты клетки)
 - `status` - показать текущее состояние игры
+
+## Web API
+
+Web-сервис предоставляет REST API для вычисления ходов:
+
+### Эндпоинты
+
+- **POST /api/move** - Вычислить следующий ход
+- **POST /api/getStatus** - Проверить статус игры
+
+### Формат запроса
+
+```json
+{
+  "size": 5,
+  "data": "       b   w w   b       ",
+  "nextPlayerColor": "b"
+}
+```
+
+### Формат ответа для хода
+
+```json
+{
+  "success": true,
+  "message": "Move calculated successfully",
+  "move": {
+    "x": 2,
+    "y": 1,
+    "color": "b"
+  }
+}
+```
+
+### Формат ответа для статуса
+
+```json
+{
+  "success": true,
+  "message": "Status retrieved successfully",
+  "status": "running",
+  "winner": "",
+  "gameOver": false
+}
+```
+
+### Пример использования
+
+```bash
+# Получить следующий ход
+curl -X POST http://localhost:8080/api/move \
+  -H "Content-Type: application/json" \
+  -d '{
+    "size": 5,
+    "data": "       b   w w   b       ",
+    "nextPlayerColor": "b"
+  }'
+
+# Проверить статус игры
+curl -X POST http://localhost:8080/api/getStatus \
+  -H "Content-Type: application/json" \
+  -d '{
+    "size": 5,
+    "data": "       b   w w   b       ",
+    "nextPlayerColor": "b"
+  }'
+```
 
 ## Запуск тестов
 
