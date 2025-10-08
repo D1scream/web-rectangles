@@ -7,6 +7,7 @@
 - Java 8+
 - Maven 3.6+
 - Python 3.x (для веб-приложения)
+- Docker (для контейнеризации)
 
 ## Сборка проекта
 
@@ -33,6 +34,18 @@ python server.py
 ```
 
 Веб-приложение будет доступно по адресу: http://localhost:3000
+
+### Docker (рекомендуется)
+```bash
+# Запуск бэкенда и фронта одновременно
+docker compose up --build
+
+# Остановка
+docker compose down
+```
+
+- Бэкенд API: http://localhost:8080
+- Фронт: http://localhost:3000
 
 ## Команды игры
 
