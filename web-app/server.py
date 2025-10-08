@@ -25,6 +25,20 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         # Обрабатываем preflight запросы
         self.send_response(200)
         self.end_headers()
+    
+    def do_GET(self):
+        # Если запрашивается config.js, генерируем его с API_URL
+        if self.path == '/js/config.js':
+            api_url = os.environ.get('API_URL', 'http://localhost:8080')
+            config_content = f'window.APP_CONFIG = {{ API_URL: "{api_url}" }};'
+            
+            self.send_response(200)
+            self.send_header('Content-type', 'application/javascript')
+            self.end_headers()
+            self.wfile.write(config_content.encode('utf-8'))
+            return
+        
+        super().do_GET()
 
 def main():
     PORT = 3000
@@ -39,8 +53,6 @@ def main():
         print("Press Ctrl+C to stop the server")
         
         try:
-            # Автоматически открываем браузер
-            webbrowser.open(f'http://localhost:{PORT}')
             httpd.serve_forever()
         except KeyboardInterrupt:
             print("\nServer stopped")

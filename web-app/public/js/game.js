@@ -95,7 +95,8 @@ async function makeComputerMove() {
     
     try {
         const boardData = getBoardString();
-        const response = await fetch('http://localhost:8080/api/move', {
+        const apiUrl = window.APP_CONFIG.API_URL;
+        const response = await fetch(`${apiUrl}/api/move`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
