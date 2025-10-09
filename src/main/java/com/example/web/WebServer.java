@@ -19,7 +19,7 @@ public class WebServer {
         
         server.createContext(MOVE_ENDPOINT, new MoveHandler(gameService));
         
-        server.setExecutor(null);
+        server.setExecutor(java.util.concurrent.Executors.newFixedThreadPool(10));
         server.start();
         
         System.out.println("Web server started on port " + PORT);
