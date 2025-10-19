@@ -2,6 +2,7 @@ package com.example.web;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
 
 import com.example.web.handler.MoveHandler;
 import com.example.web.service.GameService;
@@ -19,7 +20,7 @@ public class WebServer {
         
         server.createContext(MOVE_ENDPOINT, new MoveHandler(gameService));
         
-        server.setExecutor(java.util.concurrent.Executors.newFixedThreadPool(10));
+        server.setExecutor(Executors.newFixedThreadPool(10));
         server.start();
         
         System.out.println("Web server started on port " + PORT);

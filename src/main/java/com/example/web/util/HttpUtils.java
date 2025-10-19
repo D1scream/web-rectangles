@@ -1,6 +1,8 @@
 package com.example.web.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -28,8 +30,8 @@ public class HttpUtils {
     }
     
     public static String readRequestBody(HttpExchange exchange) throws IOException {
-        try (java.io.InputStream is = exchange.getRequestBody()) {
-            java.io.ByteArrayOutputStream buffer = new java.io.ByteArrayOutputStream();
+        try (InputStream is = exchange.getRequestBody()) {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             int nRead;
             byte[] data = new byte[1024];
             
